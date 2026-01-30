@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Dashboard Admin</title></head>
+<body>
+<h2>Dashboard Bot Realtime</h2>
+<p>Status Bot: <span id="status">-</span></p>
+<canvas id="trxChart" width="400" height="200"></canvas>
+<h3>Transaksi Pending / Paid / Expired / Refund</h3>
+<table border="1">
+<thead><tr><th>User</th><th>Produk</th><th>Nominal</th><th>Status</th><th>Aksi</th></tr></thead>
+<tbody id="trxList"></tbody>
+</table>
+
+<h3>Wallet User</h3>
+<table border="1">
+<thead><tr><th>User</th><th>Saldo</th></tr></thead>
+<tbody id="walletList"></tbody>
+</table>
+
+<script src="app.js"></script>
+</body>
+</html>
