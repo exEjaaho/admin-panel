@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel Modern</title>
+  <title>Admin Panel Modern Full</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -11,30 +11,46 @@
   <div class="sidebar">
     <h2>Admin Panel</h2>
     <ul>
-      <li class="active">Dashboard</li>
-      <li>Transactions</li>
-      <li>Wallet</li>
-      <li>CS Takeover</li>
+      <li class="active" data-section="dashboard">Dashboard</li>
+      <li data-section="transactions">Transactions</li>
+      <li data-section="wallet">Wallet</li>
+      <li data-section="cs">CS Takeover</li>
     </ul>
   </div>
 
   <div class="main-content">
     <header>
       <h1>Dashboard</h1>
-      <div class="admin-info">
-        <span>Admin</span>
+      <div class="header-right">
+        <span class="admin-name">Admin</span>
         <button id="logoutBtn">Logout</button>
+        <button id="darkModeBtn">🌙</button>
       </div>
     </header>
 
-    <section class="dashboard">
-      <div class="chart-placeholder">
-        <h3>Transactions Chart</h3>
+    <section class="dashboard-section" id="dashboard">
+      <div class="cards">
+        <div class="card">
+          <h3>Total Pending</h3>
+          <p id="totalPending">0</p>
+        </div>
+        <div class="card">
+          <h3>Total ACC</h3>
+          <p id="totalAcc">0</p>
+        </div>
+        <div class="card">
+          <h3>Today Transactions</h3>
+          <p id="todayTrx">0</p>
+        </div>
+      </div>
+
+      <div class="chart-container">
         <canvas id="chartCanvas"></canvas>
       </div>
 
       <div class="table-container">
         <h3>Recent Transactions</h3>
+        <input type="text" id="searchInput" placeholder="Search by user or product">
         <table>
           <thead>
             <tr>
