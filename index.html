@@ -1,13 +1,57 @@
-
 <!DOCTYPE html>
-<html>
-<head><title>Admin Login</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel Modern</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<h2>Login Admin OTP</h2>
-<input id="number" placeholder="628xxx">
-<button onclick="sendOTP()">Kirim OTP</button>
-<input id="otp" placeholder="OTP">
-<button onclick="login()">Login</button>
-<script src="app.js"></script>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+      <li class="active">Dashboard</li>
+      <li>Transactions</li>
+      <li>Wallet</li>
+      <li>CS Takeover</li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <header>
+      <h1>Dashboard</h1>
+      <div class="admin-info">
+        <span>Admin</span>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <section class="dashboard">
+      <div class="chart-placeholder">
+        <h3>Transactions Chart</h3>
+        <canvas id="chartCanvas"></canvas>
+      </div>
+
+      <div class="table-container">
+        <h3>Recent Transactions</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Product</th>
+              <th>Nominal</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="trxList">
+            <!-- Transactions injected here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="chart.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
