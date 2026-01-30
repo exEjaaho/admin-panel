@@ -1,70 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel Modern Full</title>
+  <title>Admin Panel Modern</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>Admin Panel</h2>
-    <ul>
-      <li class="active" data-section="dashboard">Dashboard</li>
-      <li data-section="transactions">Transactions</li>
-      <li data-section="wallet">Wallet</li>
-      <li data-section="cs">CS Takeover</li>
-    </ul>
-  </div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">WA PANEL</div>
+      <nav>
+        <a class="active" data-section="dashboard">Dashboard</a>
+        <a data-section="transactions">Transaksi</a>
+        <a data-section="wallet">Wallet</a>
+        <a data-section="cs">CS Takeover</a>
+      </nav>
+    </aside>
 
-  <div class="main-content">
-    <header>
-      <h1>Dashboard</h1>
-      <div class="header-right">
-        <span class="admin-name">Admin</span>
-        <button id="logoutBtn">Logout</button>
-        <button id="darkModeBtn">🌙</button>
-      </div>
-    </header>
+    <main class="content">
+      <header class="topbar">
+        <h1>Dashboard</h1>
+        <button class="logout">Logout</button>
+      </header>
 
-    <section class="dashboard-section" id="dashboard">
-      <div class="cards">
-        <div class="card">
-          <h3>Total Pending</h3>
-          <p id="totalPending">0</p>
+      <section class="cards">
+        <div class="card blue">
+          <span>Pending</span>
+          <b id="totalPending">0</b>
         </div>
-        <div class="card">
-          <h3>Total ACC</h3>
-          <p id="totalAcc">0</p>
+        <div class="card green">
+          <span>ACC</span>
+          <b id="totalAcc">0</b>
         </div>
-        <div class="card">
-          <h3>Today Transactions</h3>
-          <p id="todayTrx">0</p>
+        <div class="card purple">
+          <span>Total Transaksi</span>
+          <b id="todayTrx">0</b>
         </div>
-      </div>
+      </section>
 
-      <div class="chart-container">
-        <canvas id="chartCanvas"></canvas>
-      </div>
-
-      <div class="table-container">
-        <h3>Recent Transactions</h3>
+      <section class="table-box">
+        <h2>Transaksi Terbaru</h2>
         <input type="text" id="searchInput" placeholder="Search by user or product">
         <table>
           <thead>
             <tr>
               <th>User</th>
-              <th>Product</th>
+              <th>Produk</th>
               <th>Nominal</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody id="trxList"></tbody>
         </table>
-      </div>
-    </section>
+      </section>
+
+      <section class="chart-box">
+        <canvas id="chartCanvas"></canvas>
+      </section>
+    </main>
   </div>
 
   <script src="app.js"></script>
