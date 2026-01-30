@@ -1,81 +1,121 @@
-const BOT_API = 'http://IP_VPS_KAMU:3000/api'; // Ganti
-const BOT_SECRET = 'b50358ca66ccf65dabc11afe03c281be3b4d9f8972dd5dea56f18263f3f94b68';
+// LOGIN CREDENTIALS
+const USER = "Ejaa";
+const PASS = "Ejaa990011";
 
-let chartInstance;
+const loginPage = document.getElementById("loginPage");
+const dashboard = document.getElementById("dashboard");
 
-async function loadTransactions() {
-  try {
-    const res = await fetch(`${BOT_API}/transactions`, {
-      headers:{'x-bot-secret':BOT_SECRET}
+const BOT_API = "http://IP_VPS_BOT:3000/api"; // Ganti sesuai IP bot WA
+const BOT_SECRET = "b50358ca66ccf65dabc11afe03c281be3b4d9f8972dd5dea56f18263f3f94b68";          // Ganti sesuai bot
+
+// Auto-login check
+if(localStorage.getItem("login")==="ok"){
+  loginPage.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  loadTransactions();
+}
+
+// LOGIN FUNCTION
+function login(){
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
+  if(u===USER && p===PASS){
+    localStorage.setItem("login","ok");
+    loginPage.classList.add("hidden");
+    dashboard.classList.remove("hidden");
+    loadTransactions();
+  } else {
+    document.getElementById("loginError").innerText = "Username / Password salah";
+  }
+}
+
+// LOGOUT
+function logout(){
+  localStorage.removeItem("login");
+  location.reload();
+}
+
+// FETCH TRANSAKSI DARI BOT
+async function loadTransactions(){
+  try{
+    const res = await fetch(`${BOT_API}/transactions`,{
+      headers:{'x-bot-secret': BOT_SECRET}
     });
     const data = await res.json();
-    const tbody = document.getElementById('trxList');
-    tbody.innerHTML = '';
 
-    let totalPending=0,totalAcc=0,todayTrx=0;
-    Object.keys(data).forEach(user=>{
-      const trx = data[user];
+    // Update table
+    const tbody = document.getElementById("trxList");
+    tbody.innerHTML = '';
+    let totalPending=0,totalAcc=0,totalRevenue=0;
+    Object.entries(data).forEach(([user,trx])=>{
       if(trx.status==='Pending') totalPending++;
-      else if(trx.status==='ACC') totalAcc++;
-      todayTrx++;
+      if(trx.status==='ACC') totalAcc++;
+      totalRevenue += trx.nominal || 0;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${user}</td>
         <td>${trx.produk}</td>
-        <td>${trx.nominal}</td>
-        <td><span class="${trx.status==='Pending'?'status-pending':trx.status==='ACC'?'status-acc':'status-reject'}">${trx.status}</span></td>
+        <td><span class="status ${trx.status.toLowerCase()}">${trx.status}</span></td>
         <td>
-          <button class="btn-acc" onclick="accTrx('${user}')">ACC</button>
-          <button class="btn-reject" onclick="rejectTrx('${user}')">Reject</button>
+          <button class="action" onclick="acc('${user}')">ACC</button>
+          <button class="action" onclick="rej('${user}')">REJECT</button>
         </td>
       `;
       tbody.appendChild(tr);
     });
 
-    document.getElementById('totalPending').innerText=totalPending;
-    document.getElementById('totalAcc').innerText=totalAcc;
-    document.getElementById('todayTrx').innerText=todayTrx;
+    // Update cards
+    document.querySelector("#cardPending span").innerText = totalPending;
+    document.querySelector("#cardAcc span").innerText = totalAcc;
+    document.querySelector("#cardTotal span").innerText = Object.keys(data).length;
+    document.querySelector("#cardRevenue span").innerText = "Rp " + totalRevenue.toLocaleString();
 
-    updateChart(data);
+    // Update chart
+    const ctx = document.getElementById("chart").getContext('2d');
+    const products = {};
+    Object.values(data).forEach(trx=>{
+      products[trx.produk] = (products[trx.produk]||0)+1;
+    });
+    const labels = Object.keys(products);
+    const counts = Object.values(products);
 
-  } catch(err){ console.error('Gagal load transaksi',err); }
+    if(window.chartInstance) window.chartInstance.destroy();
+    window.chartInstance = new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[{label:'Transaksi',data:counts,backgroundColor:'#8b5cf6'}]
+      },
+      options:{responsive:true, maintainAspectRatio:false}
+    });
+
+  }catch(err){
+    console.error(err);
+  }
 }
 
-async function accTrx(user){
+// ACC / REJECT FUNCTIONS
+async function acc(user){
   await fetch(`${BOT_API}/transactions/acc`,{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-bot-secret':BOT_SECRET},
+    headers:{'Content-Type':'application/json','x-bot-secret': BOT_SECRET},
     body: JSON.stringify({user})
   });
   loadTransactions();
 }
 
-async function rejectTrx(user){
+async function rej(user){
   await fetch(`${BOT_API}/transactions/reject`,{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-bot-secret':BOT_SECRET},
+    headers:{'Content-Type':'application/json','x-bot-secret': BOT_SECRET},
     body: JSON.stringify({user})
   });
   loadTransactions();
 }
 
-setInterval(loadTransactions,5000);
-loadTransactions();
-
-function updateChart(data){
-  const ctx = document.getElementById('chartCanvas').getContext('2d');
-  const products={};
-  Object.values(data).forEach(trx=>{
-    if(products[trx.produk]) products[trx.produk]+=1;
-    else products[trx.produk]=1;
-  });
-  const labels=Object.keys(products);
-  const counts=Object.values(products);
-
-  if(chartInstance) chartInstance.destroy();
-  chartInstance=new Chart(ctx,{
-    type:'bar',
+// REFRESH EVERY 5 DETIK
+setInterval(()=>{if(localStorage.getItem("login")==="ok") loadTransactions();},5000);    type:'bar',
     data:{
       labels:labels,
       datasets:[{
