@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel Modern</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="sidebar">
@@ -16,6 +17,7 @@
       <li>CS Takeover</li>
     </ul>
   </div>
+
   <div class="main-content">
     <header>
       <h1>Dashboard</h1>
@@ -43,15 +45,12 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="trxList">
-            <!-- Transactions injected here -->
-          </tbody>
+          <tbody id="trxList"></tbody>
         </table>
       </div>
     </section>
   </div>
 
-  <script src="chart.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
